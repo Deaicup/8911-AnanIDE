@@ -1,0 +1,33 @@
+{
+  "name": "@anan/theia-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Theia application configuration for Anan IDE",
+  "dependencies": {
+    "@theia/core": "^1.49.0",
+    "@theia/editor": "^1.49.0",
+    "@theia/file-search": "^1.49.0",
+    "@theia/filesystem": "^1.49.0",
+    "@theia/markers": "^1.49.0",
+    "@theia/monaco": "^1.49.0",
+    "@theia/terminal": "^1.49.0",
+    "@theia/workspace": "^1.49.0",
+    "@anan/anan-ui": "0.0.0",
+    "@anan/anan-mcp": "0.0.0",
+    "@anan/anan-core": "0.0.0"
+  },
+  "scripts": {
+    "build": "theia build",
+    "dev": "theia dev",
+    "clean": "rimraf lib dist .theia"
+  },
+  "theia": {
+    "target": "browser",
+    "frontend": {
+      "config": {
+        "applicationName": "8911 安安黏糊开发机",
+        "defaultTheme": "anan-pink"
+      }
+    }
+  }
+}

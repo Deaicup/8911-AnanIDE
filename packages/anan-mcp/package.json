@@ -1,0 +1,16 @@
+{
+  "name": "@anan/anan-mcp",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Anan MCP terminal extension",
+  "dependencies": {
+    "@theia/core": "^1.49.0",
+    "@theia/terminal": "^1.49.0",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@anan/anan-shared": "0.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib"
+  }
+}

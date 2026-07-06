@@ -1,0 +1,32 @@
+{
+  "name": "anan-ide",
+  "version": "0.0.0",
+  "private": true,
+  "description": "8911 安安黏糊开发机 - 二次元风格 AI 开发软件",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "clean": "lerna clean && lerna run clean",
+    "build": "lerna run build --stream",
+    "dev": "lerna run dev --stream --parallel",
+    "test": "lerna run test --stream",
+    "test:unit": "jest --config tests/unit/jest.config.js",
+    "test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
+    "lint": "eslint \"packages/*/src/**/*.ts\"",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "lerna": "^8.1.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
