@@ -27,16 +27,15 @@ export async function discoverMcpServers(): Promise<McpServerConfig[]> {
   const genericServers = readMcpConfig(genericPath);
   servers.push(...genericServers);
 
-  // 环境变量
-  const envServers = process.env.MCP_SERVERS;
-  if (envServers) {
-    // 解析 MCP_SERVERS 环境变量（格式待定）
-  }
+  // 环境变量 MCP_SERVERS，格式：name1=url1,name2=url2
+  const envServers = parseEnvServers(process.env.MCP_SERVERS);
+  servers.push(...envServers);
 
   return servers;
 }
 
-function readMcpConfig(filePath: string): McpServerConfig[] {
+// 读取单个 MCP 配置文件（{ mcpServers: { ... } } 结构）
+export function readMcpConfig(filePath: string): McpServerConfig[] {
   try {
     if (!fs.existsSync(filePath)) return [];
     const content = fs.readFileSync(filePath, 'utf-8');
@@ -53,4 +52,26 @@ function readMcpConfig(filePath: string): McpServerConfig[] {
   } catch {
     return [];
   }
+}
+
+// 解析 MCP_SERVERS 环境变量
+// 格式：name1=url1,name2=url2
+// 例：security-scan=http://localhost:56834,code-lint=http://localhost:56835
+export function parseEnvServers(env?: string): McpServerConfig[] {
+  if (!env || !env.trim()) return [];
+  const servers: McpServerConfig[] = [];
+  for (const pair of env.split(',')) {
+    const idx = pair.indexOf('=');
+    if (idx <= 0) continue; // 缺少 name 或 url，跳过
+    const name = pair.slice(0, idx).trim();
+    const url = pair.slice(idx + 1).trim();
+    if (!name || !url) continue;
+    servers.push({
+      name,
+      type: 'http',
+      url,
+      description: 'from MCP_SERVERS env',
+    });
+  }
+  return servers;
 }

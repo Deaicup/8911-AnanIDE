@@ -19,9 +19,10 @@ function createWindow(): void {
     },
   });
 
-  // POC: 先加载 Theia 本地服务（端口待配置）
-  // mainWindow.loadURL('http://localhost:3000');
-  mainWindow.loadFile(path.join(__dirname, '../theia-app/preview/index.html'));
+  // POC: 加载本地 Theia dev 服务（默认 3000 端口）
+  // 可通过环境变量 ANAN_THEIA_URL 切换到其他地址（如生产构建产物）
+  const theiaUrl = process.env.ANAN_THEIA_URL || 'http://localhost:3000';
+  mainWindow.loadURL(theiaUrl);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
