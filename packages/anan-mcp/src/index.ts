@@ -1,11 +1,54 @@
-// anan-mcp 扩展入口
-// MCP 终端：自动发现、协议网关、高危确认
 import { ContainerModule } from '@theia/core/shared/inversify';
+import { CommandContribution, CommandRegistry } from '@theia/core/lib/common/command';
+import { MessageService } from '@theia/core/lib/common/message-service';
+import { McpService } from './client/mcp-service';
+
+export { McpService } from './client/mcp-service';
+export * from './discovery/discover';
+
+export const AnanMcpCommands = {
+  listServers: {
+    id: 'anan-mcp.list-servers',
+    label: 'List Anan MCP Servers',
+    category: 'Anan',
+  },
+  runTemplate: {
+    id: 'anan-mcp.run-template',
+    label: 'Run Anan MCP Template',
+    category: 'Anan',
+  },
+};
 
 export default new ContainerModule(bind => {
-  // MVP 阶段任务：
-  // 1. 实现 MCP 服务自动发现（扫描 ~/.workbuddy/mcp.json 等）
-  // 2. 终端提示符替换为「安安✨ ~」
-  // 3. 危险命令拦截 + 安安弹窗确认
-  // 4. MVP 用命令模板，迭代阶段接 Ollama
+  bind(McpService).toDynamicValue(() => new McpService()).inSingletonScope();
+
+  bind(CommandContribution).toDynamicValue(ctx => ({
+    registerCommands: (commands: CommandRegistry) => {
+      const service = ctx.container.get<McpService>(McpService);
+      const messages = ctx.container.get<MessageService>(MessageService);
+
+      commands.registerCommand(AnanMcpCommands.listServers, {
+        execute: async () => {
+          const servers = await service.listServers();
+          const summary = servers.length
+            ? servers.map(server => `${server.name} (${server.type})`).join(', ')
+            : 'No MCP servers discovered.';
+          await messages.info(summary);
+          return servers;
+        },
+      });
+
+      commands.registerCommand(AnanMcpCommands.runTemplate, {
+        execute: async (input = 'anan scan', serverName?: string) => {
+          const result = await service.callTemplate(input, serverName);
+          if (result.success) {
+            await messages.info(`Anan MCP completed: ${input}`);
+          } else {
+            await messages.error(result.error || 'Anan MCP failed.');
+          }
+          return result;
+        },
+      });
+    },
+  }));
 });

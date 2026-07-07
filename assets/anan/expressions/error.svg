@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Anan error placeholder">
+  <rect width="512" height="512" rx="96" fill="#fff0f0"/>
+  <circle cx="256" cy="256" r="152" fill="#ff6b6b"/>
+  <path d="M186 206l36 36m0-36l-36 36" stroke="#2a2440" stroke-width="18" stroke-linecap="round"/>
+  <path d="M290 206l36 36m0-36l-36 36" stroke="#2a2440" stroke-width="18" stroke-linecap="round"/>
+  <path d="M216 318h80" fill="none" stroke="#2a2440" stroke-width="18" stroke-linecap="round"/>
+</svg>

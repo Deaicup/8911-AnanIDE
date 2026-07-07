@@ -1,44 +1,68 @@
-# 8911 安安黏糊开发机
+# 8911 AnanIDE
 
-二次元风格独立 AI 开发软件，基于 Eclipse Theia 二次开发，内置可视化代码编辑器与原生 MCP 协议终端。
+8911 安安黏糊开发机是基于 Eclipse Theia 和 Electron 的 AI IDE 原型。当前版本已经补齐 monorepo 构建、Theia 主题、Electron 加载、安全检查、MCP 发现与调用、安安 UI overlay、autosave 快照和基础测试。
 
 ## 技术栈
 
-- **IDE 基底**：Eclipse Theia (MIT)
-- **主语言**：TypeScript
-- **动画**：PixiJS (MVP) → Inochi2D WASM (迭代)
-- **存储**：SQLite
-- **打包**：Electron
+- IDE 底座：Eclipse Theia
+- 桌面壳：Electron
+- 语言：TypeScript
+- UI 动画：PixiJS
+- 数据：SQLite `better-sqlite3`
+- 打包：electron-builder
 
-## 项目结构
-
-```
-anan-ide/
-├── packages/
-│   ├── electron/        # Electron 壳
-│   ├── theia-app/       # Theia 应用配置
-│   ├── anan-ui/         # 二次元 UI 扩展
-│   ├── anan-mcp/        # MCP 终端扩展
-│   ├── anan-core/       # 安安人格中枢
-│   └── anan-shared/     # 公共类型工具
-├── assets/              # 安安素材
-├── tests/               # 测试
-└── docs/                # 文档
-```
-
-## 开发
+## 常用命令
 
 ```bash
-npm install          # 安装依赖
-npm run build        # 构建
-npm run dev          # 开发模式
-npm test             # 运行测试
+npm install
+npm run lint
+npm run test:unit
+npm run build
+npm run smoke:electron-config
 ```
 
-## 团队
+Windows PowerShell 如果拦截 `npm.ps1`，把 `npm` 换成 `npm.cmd`。
 
-- **头盖骨**：主开发
-- **feiyu**：测试
+## 启动
+
+```bash
+npm run dev:theia
+```
+
+浏览器访问：
+
+```text
+http://localhost:3000
+```
+
+Electron 壳需要 Theia 已经启动：
+
+```bash
+npm run dev:electron
+```
+
+如果 Theia 端口不是 3000：
+
+```powershell
+$env:ANAN_THEIA_URL='http://localhost:3001'
+npm run dev:electron
+```
+
+## 打包
+
+```bash
+npm run package:dir
+npm run package:win
+```
+
+打包产物在 `release/`。首次打包前建议先跑 `npm run check`。
+
+## 文档
+
+- 新手启动说明：`docs/DEVELOPMENT.md`
+- GitHub 上传说明：`docs/GITHUB_UPLOAD.md`
+- 接手说明：`docs/TRAE-接手说明.md`
+- 防呆测试清单：`tests/foolproof/README.md`
 
 ## 协议
 

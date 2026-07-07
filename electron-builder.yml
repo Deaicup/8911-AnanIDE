@@ -1,0 +1,29 @@
+appId: com.anan.ide
+productName: 8911 AnanIDE
+directories:
+  output: release
+  buildResources: assets
+files:
+  - package.json
+  - assets/**/*
+  - packages/*/package.json
+  - packages/*/lib/**/*
+extraMetadata:
+  main: packages/electron/lib/main.js
+asar: true
+npmRebuild: false
+win:
+  signAndEditExecutable: false
+  verifyUpdateCodeSignature: false
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true

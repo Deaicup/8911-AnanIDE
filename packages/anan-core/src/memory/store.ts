@@ -5,13 +5,31 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 
+export type EventType = 'file-edit' | 'command' | 'mcp-call' | 'user-interaction';
+export type EventMetadata = Record<string, unknown> | string;
+
 export interface EventRecord {
   id?: number;
-  type: 'file-edit' | 'command' | 'mcp-call' | 'user-interaction';
+  type: EventType;
   content: string;
   project?: string;
   timestamp: string;
   metadata?: string; // JSON string
+}
+
+export interface NewEventRecord {
+  type: EventType;
+  content: string;
+  project?: string;
+  timestamp?: string;
+  metadata?: EventMetadata;
+}
+
+export interface EventQueryFilter {
+  type?: EventType;
+  project?: string;
+  since?: string;
+  limit?: number;
 }
 
 export class MemoryStore {
@@ -20,7 +38,9 @@ export class MemoryStore {
   constructor(dbPath?: string) {
     const defaultPath = path.join(os.homedir(), '.anan', 'data.db');
     const finalPath = dbPath || defaultPath;
-    fs.mkdirSync(path.dirname(finalPath), { recursive: true });
+    if (finalPath !== ':memory:') {
+      fs.mkdirSync(path.dirname(finalPath), { recursive: true });
+    }
     this.db = new Database(finalPath);
     this.initSchema();
   }
@@ -41,23 +61,28 @@ export class MemoryStore {
     `);
   }
 
-  record(event: Omit<EventRecord, 'id'>): number {
+  record(event: NewEventRecord): number {
     const stmt = this.db.prepare(
       'INSERT INTO events (type, content, project, timestamp, metadata) VALUES (?, ?, ?, ?, ?)'
     );
     const result = stmt.run(
       event.type,
-      event.content,
+      event.content.trim(),
       event.project || null,
-      event.timestamp,
-      event.metadata || null
+      event.timestamp || new Date().toISOString(),
+      serializeMetadata(event.metadata)
     );
     return Number(result.lastInsertRowid);
   }
 
-  query(filter: { type?: string; project?: string; since?: string; limit?: number }): EventRecord[] {
+  getById(id: number): EventRecord | undefined {
+    const stmt = this.db.prepare('SELECT * FROM events WHERE id = ?');
+    return stmt.get(id) as EventRecord | undefined;
+  }
+
+  query(filter: EventQueryFilter = {}): EventRecord[] {
     const conditions: string[] = [];
-    const params: any[] = [];
+    const params: unknown[] = [];
     if (filter.type) {
       conditions.push('type = ?');
       params.push(filter.type);
@@ -71,14 +96,51 @@ export class MemoryStore {
       params.push(filter.since);
     }
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-    const limit = filter.limit || 100;
+    const limit = normalizeLimit(filter.limit);
     const stmt = this.db.prepare(
       `SELECT * FROM events ${where} ORDER BY timestamp DESC LIMIT ?`
     );
     return stmt.all(...params, limit) as EventRecord[];
   }
 
+  count(filter: Pick<EventQueryFilter, 'type' | 'project'> = {}): number {
+    const conditions: string[] = [];
+    const params: unknown[] = [];
+    if (filter.type) {
+      conditions.push('type = ?');
+      params.push(filter.type);
+    }
+    if (filter.project) {
+      conditions.push('project = ?');
+      params.push(filter.project);
+    }
+    const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+    const stmt = this.db.prepare(`SELECT COUNT(*) as count FROM events ${where}`);
+    const row = stmt.get(...params) as { count: number };
+    return row.count;
+  }
+
   close(): void {
     this.db.close();
   }
+}
+
+export function serializeMetadata(metadata?: EventMetadata): string | null {
+  if (!metadata) return null;
+  return typeof metadata === 'string' ? metadata : JSON.stringify(metadata);
+}
+
+export function parseMetadata(metadata?: string | null): Record<string, unknown> | undefined {
+  if (!metadata) return undefined;
+  try {
+    const parsed = JSON.parse(metadata);
+    return typeof parsed === 'object' && parsed !== null ? parsed as Record<string, unknown> : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export function normalizeLimit(limit?: number): number {
+  if (!limit || !Number.isFinite(limit)) return 100;
+  return Math.min(Math.max(Math.floor(limit), 1), 500);
 }

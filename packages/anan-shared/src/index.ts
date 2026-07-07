@@ -3,4 +3,6 @@
 
 export * from './types/common';
 export * from './types/mcp';
+export * from './utils/command-template';
+export * from './utils/danger-check';
 export * from './utils/logger';

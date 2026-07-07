@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Anan thinking placeholder">
+  <rect width="512" height="512" rx="96" fill="#fff9ea"/>
+  <circle cx="256" cy="256" r="152" fill="#f5c15f"/>
+  <circle cx="205" cy="224" r="16" fill="#2a2440"/>
+  <circle cx="307" cy="224" r="16" fill="#2a2440"/>
+  <path d="M218 310h76" fill="none" stroke="#2a2440" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="350" cy="152" r="20" fill="#ffffff"/>
+  <circle cx="390" cy="118" r="14" fill="#ffffff"/>
+</svg>

@@ -18,9 +18,8 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "outDir": "./lib",
-    "rootDir": "./src"
+    "emitDecoratorMetadata": true
   },
-  "exclude": ["node_modules", "lib", "dist"]
+  "include": ["packages/*/src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", "lib", "dist", "**/lib", "**/dist", "**/.theia"]
 }

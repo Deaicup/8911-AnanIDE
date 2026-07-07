@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "paths": {
+      "@anan/anan-core": ["packages/anan-core/src"],
+      "@anan/anan-core/*": ["packages/anan-core/src/*"],
+      "@anan/anan-mcp": ["packages/anan-mcp/src"],
+      "@anan/anan-mcp/*": ["packages/anan-mcp/src/*"],
+      "@anan/anan-shared": ["packages/anan-shared/src"],
+      "@anan/anan-shared/*": ["packages/anan-shared/src/*"],
+      "@anan/anan-ui": ["packages/anan-ui/src"],
+      "@anan/anan-ui/*": ["packages/anan-ui/src/*"]
+    }
+  },
+  "include": ["../../packages/**/*.ts", "./**/*.ts"]
+}

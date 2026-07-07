@@ -6,6 +6,8 @@ import * as path from 'path';
 let mainWindow: BrowserWindow | null = null;
 
 function createWindow(): void {
+  const theiaUrl = process.env.ANAN_THEIA_URL || 'http://localhost:3000';
+
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
@@ -19,9 +21,8 @@ function createWindow(): void {
     },
   });
 
-  // POC: 先加载 Theia 本地服务（端口待配置）
-  // mainWindow.loadURL('http://localhost:3000');
-  mainWindow.loadFile(path.join(__dirname, '../theia-app/preview/index.html'));
+  // Theia dev server is started by packages/theia-app.
+  mainWindow.loadURL(theiaUrl);
 
   mainWindow.on('closed', () => {
     mainWindow = null;

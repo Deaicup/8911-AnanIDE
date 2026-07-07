@@ -17,9 +17,17 @@
     "@anan/anan-core": "0.0.0"
   },
   "scripts": {
-    "build": "theia build",
-    "dev": "theia dev",
+    "build": "npm run bundle && npm run patch:drivelist",
+    "bundle": "npm run rebuild && theia build --mode development",
+    "patch:drivelist": "node ../../scripts/patch-theia-drivelist.js",
+    "rebuild": "theia rebuild:browser --cacheRoot ../..",
+    "dev": "npm run build && npm run start",
+    "start": "theia start --hostname 0.0.0.0 --port 3000",
+    "watch": "npm run rebuild && theia build --watch --mode development",
     "clean": "rimraf lib dist .theia"
+  },
+  "devDependencies": {
+    "@theia/cli": "^1.49.0"
   },
   "theia": {
     "target": "browser",

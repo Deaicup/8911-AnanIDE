@@ -1,6 +1,28 @@
 // 安安配色方案定义
 // MVP 阶段实现 3 套主题：粉系/蓝系/暗夜
 import { ColorRegistry } from '@theia/core/lib/browser/color-registry';
+import { Theme } from '@theia/core/lib/common/theme';
+
+export const ANAN_THEMES: Theme[] = [
+  {
+    id: 'anan-pink',
+    label: '安安粉系',
+    type: 'light',
+    editorTheme: 'vs',
+  },
+  {
+    id: 'anan-blue',
+    label: '安安蓝系',
+    type: 'light',
+    editorTheme: 'vs',
+  },
+  {
+    id: 'anan-dark',
+    label: '安安暗夜',
+    type: 'dark',
+    editorTheme: 'vs-dark',
+  },
+];
 
 export function bindAnanThemes(colors: ColorRegistry): void {
   // 安安粉系主题

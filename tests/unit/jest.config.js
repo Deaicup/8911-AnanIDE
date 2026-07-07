@@ -1,15 +1,22 @@
-import { jest } from '@jest/globals';
-
-export default {
+/** @type {import('jest').Config} */
+module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  transform: {
+    '^.+\\.ts$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.json',
+      },
+    ],
+  },
   roots: ['<rootDir>/../../packages', '<rootDir>'],
   testMatch: ['**/*.test.ts'],
   moduleNameMapper: {
     '^@anan/(.*)$': '<rootDir>/../../packages/$1/src',
   },
   collectCoverageFrom: [
-    'packages/*/src/**/*.ts',
-    '!packages/*/src/**/*.test.ts',
+    '<rootDir>/../../packages/*/src/**/*.ts',
+    '!<rootDir>/../../packages/*/src/**/*.test.ts',
   ],
 };

@@ -1,3 +1,5 @@
-// 单元测试入口
-// 头盖骨维护，每个模块的单元测试放对应子目录
-export {};
+describe('unit test harness', () => {
+  it('loads the workspace test configuration', () => {
+    expect(true).toBe(true);
+  });
+});
