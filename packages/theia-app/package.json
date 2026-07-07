@@ -9,19 +9,26 @@
     "@theia/file-search": "^1.49.0",
     "@theia/filesystem": "^1.49.0",
     "@theia/markers": "^1.49.0",
+    "@theia/messages": "^1.49.0",
     "@theia/monaco": "^1.49.0",
+    "@theia/navigator": "^1.49.0",
+    "@theia/outline-view": "^1.49.0",
+    "@theia/preferences": "^1.49.0",
+    "@theia/process": "^1.49.0",
     "@theia/terminal": "^1.49.0",
+    "@theia/variable-resolver": "^1.49.0",
     "@theia/workspace": "^1.49.0",
     "@anan/anan-ui": "0.0.0",
     "@anan/anan-mcp": "0.0.0",
-    "@anan/anan-core": "0.0.0"
+    "@anan/anan-core": "0.0.0",
+    "@anan/anan-chat": "0.0.0"
   },
   "devDependencies": {
     "@theia/cli": "^1.73.0"
   },
   "scripts": {
     "build": "theia build",
-    "dev": "theia dev",
+    "dev": "theia start",
     "clean": "rimraf lib dist .theia src-gen"
   },
   "theia": {

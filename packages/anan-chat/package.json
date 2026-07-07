@@ -1,14 +1,12 @@
 {
-  "name": "@anan/anan-ui",
+  "name": "@anan/anan-chat",
   "version": "0.0.0",
   "private": true,
-  "description": "Anan anime-style UI extension",
+  "description": "Anan built-in chat extension with Agent context sharing",
   "dependencies": {
     "@theia/core": "^1.49.0",
     "@theia/editor": "^1.49.0",
-    "@theia/workspace": "^1.49.0",
-    "pixi.js": "^8.1.0",
-    "@anan/anan-shared": "0.0.0"
+    "@theia/workspace": "^1.49.0"
   },
   "scripts": {
     "build": "tsc",

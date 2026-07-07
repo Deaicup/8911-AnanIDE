@@ -13,6 +13,9 @@ build/
 src-gen/
 gen-esbuild.*.mjs
 
+# node-gyp cache
+.node-gyp/
+
 # Electron
 out/
 release/
