@@ -16,6 +16,10 @@ gen-esbuild.*.mjs
 # node-gyp cache
 .node-gyp/
 
+# Python cache
+__pycache__/
+*.pyc
+
 # Electron
 out/
 release/
