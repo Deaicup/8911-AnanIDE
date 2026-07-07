@@ -84,29 +84,26 @@ anan-ide/
 
 ## 下一步任务（按优先级）
 
-### POC 阶段剩余任务（本周内）
+### 第一轮 POC 收尾完成情况（2026-07-06）
 
-1. **安装依赖并跑通构建**
-   ```bash
-   cd D:\Code\anan-ide
-   npm install
-   npm run build
-   ```
-   预期会有依赖解析问题（Theia 包名、版本兼容性），需要逐个修复。
+| 任务 | 状态 | 说明 |
+|------|------|------|
+| 安装依赖并跑通构建 | ✅ 完成 | better-sqlite3 升级 12.x 适配 Node 24；各包补齐 tsconfig；非 Theia 包 tsc 全通过；Theia build（esbuild）通过 |
+| Theia 本地启动验证 | ⚠️ 代码就绪 | 主题代码已适配 Theia 1.73 API（ColorRegistry + ThemeService）并移入 anan-ui；theia-app 已配 @theia/cli。**待运行**：`cd packages/theia-app && npx theia dev`，浏览器访问 :3000，在 Preferences → Color Theme 验证 anan-pink/blue/dark 三套主题可切换 |
+| Electron 打通 Theia | ⚠️ 代码就绪 | `main.ts` 已改为 `loadURL('http://localhost:3000')`（可经 `ANAN_THEIA_URL` 覆盖）。**待运行**：先起 Theia dev，再 `cd packages/electron && npx tsc && npx electron lib/main.js`，验证窗口渲染 Theia、单实例锁定生效 |
+| 单元测试补齐 | ✅ 完成 | 5 套件 / 79 用例全绿：danger-check / Safety / MemoryStore / MCP 发现 / 共享类型 |
+| Lint + Format | ✅ 完成 | 新增 .eslintrc.js + .prettierrc.json，`npm run lint` 无 error |
+| Git 提交 | ✅ 完成 | commit `b0be2c4`，分支 main（领先 origin/main 2 个提交，待 push） |
 
-2. **Theia 本地启动验证**
-   - 配置 `packages/theia-app` 的 Theia 构建脚本
-   - `npm run dev` 启动 Theia 浏览器版
-   - 验证 3 套安安主题能切换
+#### 第一轮发现并修复的缺陷
+1. `anan-core/safety/safety.ts` 跨包 import 路径深度错误：`../../anan-mcp/lib/...` 应为 `../../../anan-mcp/lib/...`
+2. `anan-mcp/discovery/discover.ts` 的 `MCP_SERVERS` 环境变量解析原为 TODO，已补全（格式 `name1=url1,name2=url2`）
+3. `tests/unit/jest.config.js` 原用 ESM `import` 语法且引用未安装的 `@jest/globals`，已改为 CommonJS 并补齐 jest/ts-jest 依赖
+4. `discoverMcpServers` 新增可选 `homeDir` 参数以支持测试注入（沙箱环境下 `os.homedir()` 行为受限）
+5. Theia 实际安装版本为 1.73.1（非 package.json 声明的 1.49），颜色 API 变更，`anan-themes` 已重写适配
 
-3. **Electron 打通 Theia**
-   - 修改 `packages/electron/src/main.ts` 的 `loadURL` 指向 Theia 本地服务
-   - 验证 Electron 窗口能加载 Theia 界面
-
-4. **Inochi2D WASM 加载 Demo**
-   - 在 `packages/anan-ui/src/live2d/` 下写一个最小 Demo
-   - 加载 Inochi2D WASM 模块，渲染一个测试 Puppet
-   - 验证 WASM 在 Electron 环境可用
+#### 待 push
+本地已领先 `origin/main` 2 个提交，确认后执行 `git push`。
 
 ### MVP 阶段任务（第 3-8 周）
 
