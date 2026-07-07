@@ -13,9 +13,9 @@ export interface McpServerConfig {
   description?: string;
 }
 
-export async function discoverMcpServers(): Promise<McpServerConfig[]> {
+export async function discoverMcpServers(homeDir?: string): Promise<McpServerConfig[]> {
   const servers: McpServerConfig[] = [];
-  const home = os.homedir();
+  const home = homeDir || os.homedir();
 
   // 扫描 WorkBuddy MCP 配置
   const workbuddyPath = path.join(home, '.workbuddy', 'mcp.json');

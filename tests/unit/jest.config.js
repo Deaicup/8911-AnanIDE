@@ -9,7 +9,7 @@ module.exports = {
     // @anan/* 别名映射到各包 src
     '^@anan/(.*)$': '<rootDir>/../../packages/$1/src',
     // safety.ts 跨包引用 anan-mcp/lib/... 时，测试环境重定向到 src
-    '^\\.\\./\\.\\./anan-mcp/lib/(.*)$': '<rootDir>/../../packages/anan-mcp/src/$1',
+    '^(\.\\./)+anan-mcp/lib/(.*)$': '<rootDir>/../../packages/anan-mcp/src/$2',
   },
   collectCoverageFrom: [
     'packages/*/src/**/*.ts',

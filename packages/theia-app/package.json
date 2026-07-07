@@ -16,10 +16,13 @@
     "@anan/anan-mcp": "0.0.0",
     "@anan/anan-core": "0.0.0"
   },
+  "devDependencies": {
+    "@theia/cli": "^1.73.0"
+  },
   "scripts": {
     "build": "theia build",
     "dev": "theia dev",
-    "clean": "rimraf lib dist .theia"
+    "clean": "rimraf lib dist .theia src-gen"
   },
   "theia": {
     "target": "browser",

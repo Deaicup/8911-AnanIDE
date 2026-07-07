@@ -2,7 +2,7 @@
 // MCP 终端：自动发现、协议网关、高危确认
 import { ContainerModule } from '@theia/core/shared/inversify';
 
-export default new ContainerModule(bind => {
+export default new ContainerModule((_bind) => {
   // MVP 阶段任务：
   // 1. 实现 MCP 服务自动发现（扫描 ~/.workbuddy/mcp.json 等）
   // 2. 终端提示符替换为「安安✨ ~」

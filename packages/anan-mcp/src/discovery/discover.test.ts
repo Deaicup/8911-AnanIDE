@@ -1,14 +1,10 @@
 // MCP 服务发现单元测试
 // 通过 jest.spyOn(os, 'homedir') 指向临时目录，写入测试配置文件
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import * as os from 'os';
 import * as path from 'path';
 import * as fs from 'fs';
-import {
-  discoverMcpServers,
-  readMcpConfig,
-  parseEnvServers,
-} from './discover';
+import { discoverMcpServers, readMcpConfig, parseEnvServers } from './discover';
 
 describe('MCP 服务发现', () => {
   describe('readMcpConfig 配置文件解析', () => {
@@ -33,10 +29,14 @@ describe('MCP 服务发现', () => {
         cfgPath,
         JSON.stringify({
           mcpServers: {
-            'security-scan': { type: 'http', url: 'http://localhost:56834', description: '安全扫描' },
+            'security-scan': {
+              type: 'http',
+              url: 'http://localhost:56834',
+              description: '安全扫描',
+            },
             'code-lint': { type: 'stdio', command: 'node', args: ['lint.js'] },
           },
-        })
+        }),
       );
       const result = readMcpConfig(cfgPath);
       expect(result).toHaveLength(2);
@@ -67,10 +67,7 @@ describe('MCP 服务发现', () => {
 
     it('未指定 type 时默认 http', () => {
       const cfgPath = path.join(tmpDir, 'mcp.json');
-      fs.writeFileSync(
-        cfgPath,
-        JSON.stringify({ mcpServers: { foo: { url: 'http://x' } } })
-      );
+      fs.writeFileSync(cfgPath, JSON.stringify({ mcpServers: { foo: { url: 'http://x' } } }));
       const [server] = readMcpConfig(cfgPath);
       expect(server.type).toBe('http');
     });
@@ -116,26 +113,24 @@ describe('MCP 服务发现', () => {
   });
 
   describe('discoverMcpServers 集成', () => {
+    // 通过 homeDir 参数注入临时目录，避免依赖 os.homedir() 的环境变量行为
     let tmpHome: string;
-    let homedirSpy: jest.SpyInstance;
     let originalEnv: string | undefined;
 
     beforeEach(() => {
       tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), 'anan-home-'));
-      homedirSpy = jest.spyOn(os, 'homedir').mockReturnValue(tmpHome);
       originalEnv = process.env.MCP_SERVERS;
       delete process.env.MCP_SERVERS;
     });
 
     afterEach(() => {
-      homedirSpy.mockRestore();
       if (originalEnv === undefined) delete process.env.MCP_SERVERS;
       else process.env.MCP_SERVERS = originalEnv;
       fs.rmSync(tmpHome, { recursive: true, force: true });
     });
 
     it('无任何配置时返回空数组', async () => {
-      const result = await discoverMcpServers();
+      const result = await discoverMcpServers(tmpHome);
       expect(result).toEqual([]);
     });
 
@@ -144,10 +139,10 @@ describe('MCP 服务发现', () => {
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(
         path.join(dir, 'mcp.json'),
-        JSON.stringify({ mcpServers: { wb: { url: 'http://wb:1' } } })
+        JSON.stringify({ mcpServers: { wb: { url: 'http://wb:1' } } }),
       );
-      const result = await discoverMcpServers();
-      expect(result.some(s => s.name === 'wb')).toBe(true);
+      const result = await discoverMcpServers(tmpHome);
+      expect(result.some((s) => s.name === 'wb')).toBe(true);
     });
 
     it('读取 ~/.config/mcp/servers.json', async () => {
@@ -155,10 +150,10 @@ describe('MCP 服务发现', () => {
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(
         path.join(dir, 'servers.json'),
-        JSON.stringify({ mcpServers: { gen: { url: 'http://gen:1' } } })
+        JSON.stringify({ mcpServers: { gen: { url: 'http://gen:1' } } }),
       );
-      const result = await discoverMcpServers();
-      expect(result.some(s => s.name === 'gen')).toBe(true);
+      const result = await discoverMcpServers(tmpHome);
+      expect(result.some((s) => s.name === 'gen')).toBe(true);
     });
 
     it('合并配置文件与环境变量 MCP_SERVERS', async () => {
@@ -166,11 +161,11 @@ describe('MCP 服务发现', () => {
       fs.mkdirSync(dir, { recursive: true });
       fs.writeFileSync(
         path.join(dir, 'mcp.json'),
-        JSON.stringify({ mcpServers: { file: { url: 'http://file:1' } } })
+        JSON.stringify({ mcpServers: { file: { url: 'http://file:1' } } }),
       );
       process.env.MCP_SERVERS = 'env1=http://env:1,env2=http://env:2';
-      const result = await discoverMcpServers();
-      const names = result.map(s => s.name);
+      const result = await discoverMcpServers(tmpHome);
+      const names = result.map((s) => s.name);
       expect(names).toEqual(expect.arrayContaining(['file', 'env1', 'env2']));
       expect(result).toHaveLength(3);
     });

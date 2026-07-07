@@ -12,7 +12,10 @@ describe('MemoryStore 知识图谱存储', () => {
 
   beforeEach(() => {
     // 每个用例独立 db 文件，互不干扰
-    tmpDbPath = path.join(os.tmpdir(), `anan-test-${Date.now()}-${Math.random().toString(36).slice(2)}.db`);
+    tmpDbPath = path.join(
+      os.tmpdir(),
+      `anan-test-${Date.now()}-${Math.random().toString(36).slice(2)}.db`,
+    );
     store = new MemoryStore(tmpDbPath);
   });
 
@@ -48,18 +51,43 @@ describe('MemoryStore 知识图谱存储', () => {
   });
 
   it('query 按 type 过滤正确', () => {
-    store.record({ type: 'file-edit', content: 'a', project: 'p', timestamp: '2026-01-01T00:00:00Z' });
-    store.record({ type: 'command', content: 'b', project: 'p', timestamp: '2026-01-02T00:00:00Z' });
-    store.record({ type: 'file-edit', content: 'c', project: 'p', timestamp: '2026-01-03T00:00:00Z' });
+    store.record({
+      type: 'file-edit',
+      content: 'a',
+      project: 'p',
+      timestamp: '2026-01-01T00:00:00Z',
+    });
+    store.record({
+      type: 'command',
+      content: 'b',
+      project: 'p',
+      timestamp: '2026-01-02T00:00:00Z',
+    });
+    store.record({
+      type: 'file-edit',
+      content: 'c',
+      project: 'p',
+      timestamp: '2026-01-03T00:00:00Z',
+    });
 
     const edits = store.query({ type: 'file-edit' });
     expect(edits).toHaveLength(2);
-    expect(edits.every(e => e.type === 'file-edit')).toBe(true);
+    expect(edits.every((e) => e.type === 'file-edit')).toBe(true);
   });
 
   it('query 按 project 过滤正确', () => {
-    store.record({ type: 'command', content: 'x', project: 'proj-a', timestamp: '2026-01-01T00:00:00Z' });
-    store.record({ type: 'command', content: 'y', project: 'proj-b', timestamp: '2026-01-01T00:00:00Z' });
+    store.record({
+      type: 'command',
+      content: 'x',
+      project: 'proj-a',
+      timestamp: '2026-01-01T00:00:00Z',
+    });
+    store.record({
+      type: 'command',
+      content: 'y',
+      project: 'proj-b',
+      timestamp: '2026-01-01T00:00:00Z',
+    });
 
     const result = store.query({ project: 'proj-a' });
     expect(result).toHaveLength(1);
@@ -67,8 +95,18 @@ describe('MemoryStore 知识图谱存储', () => {
   });
 
   it('query 按 since 时间过滤正确', () => {
-    store.record({ type: 'command', content: 'old', project: 'p', timestamp: '2026-01-01T00:00:00Z' });
-    store.record({ type: 'command', content: 'new', project: 'p', timestamp: '2026-06-01T00:00:00Z' });
+    store.record({
+      type: 'command',
+      content: 'old',
+      project: 'p',
+      timestamp: '2026-01-01T00:00:00Z',
+    });
+    store.record({
+      type: 'command',
+      content: 'new',
+      project: 'p',
+      timestamp: '2026-06-01T00:00:00Z',
+    });
 
     const result = store.query({ since: '2026-05-01T00:00:00Z' });
     expect(result).toHaveLength(1);
@@ -76,8 +114,18 @@ describe('MemoryStore 知识图谱存储', () => {
   });
 
   it('query 默认按时间倒序返回', () => {
-    store.record({ type: 'command', content: 'first', project: 'p', timestamp: '2026-01-01T00:00:00Z' });
-    store.record({ type: 'command', content: 'second', project: 'p', timestamp: '2026-02-01T00:00:00Z' });
+    store.record({
+      type: 'command',
+      content: 'first',
+      project: 'p',
+      timestamp: '2026-01-01T00:00:00Z',
+    });
+    store.record({
+      type: 'command',
+      content: 'second',
+      project: 'p',
+      timestamp: '2026-02-01T00:00:00Z',
+    });
 
     const result = store.query({});
     expect(result[0].content).toBe('second');
@@ -86,7 +134,12 @@ describe('MemoryStore 知识图谱存储', () => {
 
   it('query limit 限制返回条数', () => {
     for (let i = 0; i < 5; i++) {
-      store.record({ type: 'command', content: `cmd-${i}`, project: 'p', timestamp: `2026-01-0${i + 1}T00:00:00Z` });
+      store.record({
+        type: 'command',
+        content: `cmd-${i}`,
+        project: 'p',
+        timestamp: `2026-01-0${i + 1}T00:00:00Z`,
+      });
     }
     const result = store.query({ limit: 2 });
     expect(result).toHaveLength(2);

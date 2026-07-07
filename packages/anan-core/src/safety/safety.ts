@@ -1,6 +1,6 @@
 // 防呆设计核心模块
 // 所有其他模块执行用户操作前必须调用 Safety 做前置检查
-import { checkCommand, CommandCheckResult } from '../../anan-mcp/lib/confirm/danger-check';
+import { checkCommand, CommandCheckResult } from '../../../anan-mcp/lib/confirm/danger-check';
 
 export interface InputRules {
   maxLength?: number;
@@ -83,8 +83,8 @@ export class Safety {
   // 资源限制检查
   static checkResource(type: 'memory' | 'disk' | 'filesize', value: number): boolean {
     const limits = {
-      memory: 800 * 1024 * 1024,    // 800MB
-      disk: 1024 * 1024 * 1024,      // 1GB 剩余
+      memory: 800 * 1024 * 1024, // 800MB
+      disk: 1024 * 1024 * 1024, // 1GB 剩余
       filesize: MAX_FILE_SIZE,
     };
     return value < limits[type];

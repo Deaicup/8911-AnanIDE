@@ -9,6 +9,10 @@ dist/
 build/
 *.tsbuildinfo
 
+# Theia generated artifacts
+src-gen/
+gen-esbuild.*.mjs
+
 # Electron
 out/
 release/

@@ -1,14 +1,8 @@
 // Theia 前端模块入口
-// POC 阶段：注册安安主题和扩展模块
+// POC 阶段：主题注册已移至 @anan/anan-ui 扩展（Theia 仅加载依赖包的 theiaExtensions）
+// 此处保留空模块，供后续 theia-app 自定义扩展使用
 import { ContainerModule } from '@theia/core/shared/inversify';
-import { ColorContribution } from '@theia/core/lib/browser/color-application-contribution';
-import { bindAnanThemes } from './style/anan-themes';
 
-export default new ContainerModule(bind => {
-  // 注册安安配色方案
-  bind(ColorContribution).toDynamicValue(ctx => ({
-    registerColors: bindAnanThemes,
-  }));
-
-  // POC: 后续在此绑定 anan-ui / anan-mcp / anan-core 的前端扩展
+export default new ContainerModule((_bind) => {
+  // 后续 theia-app 自定义绑定放这里
 });

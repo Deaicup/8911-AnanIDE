@@ -70,7 +70,7 @@ describe('checkCommand 危险命令检测', () => {
       'pwd',
     ];
 
-    safeCases.forEach(cmd => {
+    safeCases.forEach((cmd) => {
       it(`safe 放行: "${cmd}"`, () => {
         const result = checkCommand(cmd);
         expect(result.dangerous).toBe(false);

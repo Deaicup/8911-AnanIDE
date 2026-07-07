@@ -43,19 +43,24 @@ export class MemoryStore {
 
   record(event: Omit<EventRecord, 'id'>): number {
     const stmt = this.db.prepare(
-      'INSERT INTO events (type, content, project, timestamp, metadata) VALUES (?, ?, ?, ?, ?)'
+      'INSERT INTO events (type, content, project, timestamp, metadata) VALUES (?, ?, ?, ?, ?)',
     );
     const result = stmt.run(
       event.type,
       event.content,
       event.project || null,
       event.timestamp,
-      event.metadata || null
+      event.metadata || null,
     );
     return Number(result.lastInsertRowid);
   }
 
-  query(filter: { type?: string; project?: string; since?: string; limit?: number }): EventRecord[] {
+  query(filter: {
+    type?: string;
+    project?: string;
+    since?: string;
+    limit?: number;
+  }): EventRecord[] {
     const conditions: string[] = [];
     const params: any[] = [];
     if (filter.type) {
@@ -72,9 +77,7 @@ export class MemoryStore {
     }
     const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
     const limit = filter.limit || 100;
-    const stmt = this.db.prepare(
-      `SELECT * FROM events ${where} ORDER BY timestamp DESC LIMIT ?`
-    );
+    const stmt = this.db.prepare(`SELECT * FROM events ${where} ORDER BY timestamp DESC LIMIT ?`);
     return stmt.all(...params, limit) as EventRecord[];
   }
 

@@ -21,9 +21,9 @@ export interface McpCallResult {
 
 // 命令模板（MVP 阶段 NL→MCP 的替代方案）
 export interface CommandTemplate {
-  alias: string;        // 如 "scan"
-  description: string;  // "安全扫描"
-  toolName: string;     // MCP 工具名
+  alias: string; // 如 "scan"
+  description: string; // "安全扫描"
+  toolName: string; // MCP 工具名
   parameters?: Record<string, unknown>;
 }
 
