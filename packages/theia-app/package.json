@@ -21,7 +21,8 @@
     "@anan/anan-ui": "0.0.0",
     "@anan/anan-mcp": "0.0.0",
     "@anan/anan-core": "0.0.0",
-    "@anan/anan-chat": "0.0.0"
+    "@anan/anan-chat": "0.0.0",
+    "@anan/anan-agent": "0.0.0"
   },
   "devDependencies": {
     "@theia/cli": "^1.73.0"

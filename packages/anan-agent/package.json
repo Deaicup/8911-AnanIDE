@@ -1,0 +1,18 @@
+{
+  "name": "@anan/anan-agent",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Anan AI Agent extension with streaming LLM proxy (Trae-style)",
+  "dependencies": {
+    "@theia/core": "^1.49.0",
+    "@theia/editor": "^1.49.0",
+    "@theia/workspace": "^1.49.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf lib"
+  },
+  "theiaExtensions": [
+    { "frontend": "lib/browser/index", "backend": "lib/node/index" }
+  ]
+}
