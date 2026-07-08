@@ -40,6 +40,8 @@ export const AGENT_MODELS: AgentModelOption[] = [
   { label: 'DeepSeek V3', value: 'deepseek-chat' },
   { label: 'DeepSeek R1', value: 'deepseek-reasoner' },
   { label: 'Qwen2.5 Coder', value: 'qwen2.5-coder-32b-instruct' },
+  { label: 'GLM-5.1', value: 'glm-5.1' },
+  { label: 'GLM-Latest', value: 'glm-latest' },
   { label: '本地 Ollama', value: 'ollama' },
 ];
 

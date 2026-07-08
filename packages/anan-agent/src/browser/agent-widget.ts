@@ -12,6 +12,14 @@ import {
 
 // ---- CSS 样式（安安粉系主题） ----
 const AGENT_CSS = `
+/* Agent 面板图标（活动栏/标签栏显示）——粉色安安 AI 星标 */
+.anan-agent-icon {
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8L12 2z'/><circle cx='18' cy='17' r='2.2'/><circle cx='6' cy='17' r='2.2'/></svg>") center / 60% no-repeat;
+  background: #FF6BAA;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
 .anan-agent-widget {
   display: flex;
   flex-direction: column;
