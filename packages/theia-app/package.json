@@ -37,7 +37,8 @@
     "frontend": {
       "config": {
         "applicationName": "8911 安安黏糊开发机",
-        "defaultTheme": "anan-pink"
+        "defaultTheme": "anan-pink",
+        "defaultWorkspace": "file:///d:/Code/anan-ide"
       }
     }
   }
