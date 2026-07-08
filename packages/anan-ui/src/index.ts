@@ -5,6 +5,7 @@ import { ContainerModule, injectable, inject } from '@theia/core/shared/inversif
 import { ColorContribution } from '@theia/core/lib/browser/color-application-contribution';
 import { FrontendApplicationContribution } from '@theia/core/lib/browser/frontend-application-contribution';
 import { MenuContribution } from '@theia/core/lib/common/menu';
+import { CommandContribution } from '@theia/core/lib/common/command';
 import { ThemeService } from '@theia/core/lib/browser/theming';
 import { FrontendApplication } from '@theia/core/lib/browser';
 import { bindAnanThemes, ANAN_THEMES } from './themes/anan-themes';
@@ -44,8 +45,9 @@ export default new ContainerModule(bind => {
   // 注册安安命名主题 + 默认切换 + 变色动效 + 桌面宠物
   bind(FrontendApplicationContribution).to(AnanThemeContribution);
 
-  // File 菜单补齐：新建/打开/保存/另存为/打开文件夹
+  // File 菜单补齐：新建/打开/保存/另存为/打开文件夹（自定义命令始终可见）
   bind(MenuContribution).to(AnanFileMenuContribution);
+  bind(CommandContribution).to(AnanFileMenuContribution);
 
   // MVP 阶段任务：
   // 1. 注册二次元文件树图标主题
